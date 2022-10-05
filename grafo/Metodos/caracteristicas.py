@@ -23,35 +23,27 @@ def verificaAdjacencia(matriz, vi, vj):
     print('Vertices', vi, 'e', vj, 'são adjacentes?', verticesAdjacentes, '\n')
     return verticesAdjacentes
 
-def criaListaAdjacencias(matriz):
-    lista = ''
-    aux= 0
-    for i in range(np.shape(matriz)[0]):
-        lista += '\nv'+ str(i)
-        for j in range(np.shape(matriz)[1]) :
-            if matriz[i][j] != 0:
-                while aux < matriz[i][j]:
-                    lista += "->v"+ str(j)
-                    aux += 1
-                aux = 0
-    print(lista)
-                
 
 def tipoGrafo(matriz):
     tipo = 0;
     for i in range(np.shape(matriz)[0]):
-        if matriz[i][i] == 1:
-            tipo = 3;
-            return tipo #Checando se existe algum laço atraves da diagonal se tiver ->peudografo
-        for j in range(np.shape(matriz)[1]) :
-            if matriz[i][j] > 1 and tipo != 1:
-                tipo =  2 #Se qualquer adjacencia possuir mais de uma aresta -> Multigrafo
-            if matriz[i][j] != matriz[j][i] :
-                tipo = 1 #Se existir algum ponto na matriz que seu oposto não seja igual ela é um digrafo
+         for j in range(np.shape(matriz)[1]) :
+             if matriz[i][j] != matriz[j][i] :
+                tipo = 1
 
+    for i in range(np.shape(matriz)[0]):
+        if matriz[i][i] == 1 and tipo == 1:
+            tipo = 31
+        elif matriz[i][i] == 1 and tipo == 0:
+            tipo = 30
+        for j in range(np.shape(matriz)[1]) :
+            if matriz[i][j] > 1 and tipo == 1:
+                tipo =  21 #Se qualquer adjacencia possuir mais de uma aresta -> Multigrafo
+            elif  matriz[i][j] > 1 and tipo == 0:
+                tipo = 20
+    print(tipo)
     return tipo #Se não possui laço, não possui arestas paralelas e todos os pontos opostos são iguais Grafo simples.
-    
-    
+
 def calcDensidade(matriz):
     if tipoGrafo(matriz) == 0 :
         qtdVert = np.shape(matriz)[0]
@@ -82,6 +74,7 @@ def insereAresta(matriz,vi,vj):
         matriz[vj][vi] += 1
     return matriz
 
+
 def removeAresta(matriz,vi,vj):
     if tipoGrafo(matriz) == 1 :
         if matriz[vi][vj] != 0:
@@ -95,14 +88,13 @@ def removeAresta(matriz,vi,vj):
         else:
             print("Essa aresta já não existe")
     return matriz
-    
+
 def insereVertice(matriz,vi):
     matriz = np.hstack((matriz,np.zeros((matriz.shape[1],1), dtype=matriz.dtype  )))
     matriz = np.vstack((matriz,np.zeros((1,(matriz.shape[0])+1), dtype=matriz.dtype  )))
     return matriz 
     
+        
 
-    
 
-def removeVertice(matriz,vi):
-    pass 
+
